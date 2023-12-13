@@ -8,7 +8,7 @@
 		<my-select :options="sortingList" v-model="selectedSort"	class="green" style="margin-left: 10px"></my-select>
 
 		<div style="width: fit-content; margin: 0 auto;">
-			<post-list v-bind:posts="posts" @delete="deletePost"/>
+			<post-list v-bind:posts="sortedPosts" @delete="deletePost"/>
 		</div>
 
 		<div v-if="loading">Loading posts...</div>
@@ -75,18 +75,17 @@ export default {
 
 	},
 	computed: {
-
-	},
-	watch: {
-		selectedSort(newValue){
-			this.posts = this.posts.sort((post_1, post_2) => {
-				if (typeof post_1[newValue] === 'number') {
-					console.log(post_1[newValue])
-					return post_1[newValue] - post_2[newValue]
+		sortedPosts(){
+			return this.posts.sort((post_1, post_2) => {
+				if (typeof post_1[this.selectedSort] === 'number') {
+					console.log(post_1[this.selectedSort])
+					return post_1[this.selectedSort] - post_2[this.selectedSort]
 				}
-				return post_1[newValue]?.toLowerCase().localeCompare(post_2[newValue].toLowerCase())
+				return post_1[this.selectedSort]?.toLowerCase().localeCompare(post_2[this.selectedSort].toLowerCase())
 			})
 		}
+	},
+	watch: {
 	},
 	mounted(){
 		this.getPosts()
